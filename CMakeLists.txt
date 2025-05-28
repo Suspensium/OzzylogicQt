@@ -3,7 +3,7 @@ project(OzzylogicQt LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql)
 qt_standard_project_setup()
 
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS include/*.h)
@@ -14,11 +14,16 @@ qt_add_executable(OzzylogicQt ${SOURCES} ${HEADERS})
 target_include_directories(OzzylogicQt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(OzzylogicQt PUBLIC Qt6::Core Qt6::Widgets)
+target_link_libraries(OzzylogicQt PUBLIC Qt6::Core Qt6::Widgets Qt6::Sql)
 
 add_custom_target(copy_database ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data
         COMMENT "Copying database into binary directory")
 
-add_dependencies(OzzylogicQt copy_database)
+add_custom_target(copy_icons ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/icons ${CMAKE_CURRENT_BINARY_DIR}/icons
+        COMMENT "Copying icons into binary directory")
+
+add_dependencies(OzzylogicQt copy_database copy_icons)
