@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QIcon>
 
+#include "DataStructures.h"
+
 TreeViewModel::TreeViewModel(IDatabaseManager *database, const QString &connectionString, QObject *parent)
     : QAbstractItemModel{parent} {
     m_dbManager = database;
@@ -16,7 +18,7 @@ QModelIndex TreeViewModel::index(int row, int column, const QModelIndex &parent)
     if (!hasIndex(row, column, parent)) return {};
 
     const TreeViewItem *parentItem{
-        parent.isValid() ? static_cast<TreeViewItem *>(parent.internalPointer()) : m_rootItem
+        parent.isValid() ? static_cast<TreeViewItem *>(parent.internalPointer()) : m_rootItem.get()
     };
     const TreeViewItem *childItem{parentItem->child(row)};
     return childItem ? createIndex(row, column, childItem) : QModelIndex();
@@ -28,14 +30,14 @@ QModelIndex TreeViewModel::parent(const QModelIndex &index) const {
     const TreeViewItem *childItem{static_cast<TreeViewItem *>(index.internalPointer())};
     const TreeViewItem *parentItem{childItem->parentItem()};
 
-    if (parentItem == m_rootItem) return {};
+    if (parentItem == m_rootItem.get()) return {};
 
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
 int TreeViewModel::rowCount(const QModelIndex &parent) const {
     const TreeViewItem *parentItem{
-        parent.isValid() ? static_cast<TreeViewItem *>(parent.internalPointer()) : m_rootItem
+        parent.isValid() ? static_cast<TreeViewItem *>(parent.internalPointer()) : m_rootItem.get()
     };
     return parentItem->childCount();
 }
@@ -46,27 +48,29 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
     const TreeViewItem *item{static_cast<TreeViewItem *>(index.internalPointer())};
     const QVariant &itemData{item->data()};
 
-    if (role == Qt::DisplayRole) return itemData;
+    if (itemData.canConvert<CountryInfo>()) {
+        const CountryInfo country{itemData.value<CountryInfo>()};
 
-    if (role == Qt::DecorationRole) {
-        if (itemData.canConvert<CountryInfo>()) {
-            const CountryInfo country{itemData.value<CountryInfo>()};
+        if (role == Qt::DisplayRole) {
+            return QVariant::fromValue(country);
+        }
+        if (role == Qt::DecorationRole) {
             if (QFile::exists(country.iconPath)) {
                 return QIcon{country.iconPath};
             }
-            return {};
         }
+    } else if (itemData.canConvert<OperatorInfo>()) {
+        const OperatorInfo op{itemData.value<OperatorInfo>()};
 
-        if (itemData.canConvert<OperatorInfo>()) {
-            const OperatorInfo op{itemData.value<OperatorInfo>()};
+        if (role == Qt::DisplayRole) {
+            return QVariant::fromValue(op);
+        }
+        if (role == Qt::DecorationRole) {
             if (QFile::exists(op.iconPath)) {
                 return QIcon{op.iconPath};
             }
-
-            return {};
         }
     }
-
     return {};
 }
 
@@ -74,7 +78,7 @@ void TreeViewModel::setupModelData() {
     QList<CountryInfo> countries{m_dbManager->getCountryOperatorData()};
 
     for (const CountryInfo &country: countries) {
-        TreeViewItem *countryItem{new TreeViewItem(QVariant::fromValue(country), m_rootItem)};
+        TreeViewItem *countryItem{new TreeViewItem(QVariant::fromValue(country), m_rootItem.get())};
         m_rootItem->appendChild(countryItem);
 
         for (const OperatorInfo &op: country.operators) {

@@ -20,7 +20,7 @@ public:
 
     QSqlQuery executeQuery(const QString &query) override;
 
-    QList<CountryInfo> getCountryOperatorData() override;
+    QList<struct CountryInfo> getCountryOperatorData() override;
 
 private:
     QSqlDatabase m_db;

@@ -1,7 +1,8 @@
-#include <QApplication>
 #include <QTreeView>
 
+#include "DataStructures.h"
 #include "SQLiteManager.h"
+#include "StyledOperatorDelegate.h"
 #include "TreeViewModel.h"
 
 int main(int argc, char *argv[]) {
@@ -14,8 +15,10 @@ int main(int argc, char *argv[]) {
 
     TreeViewModel model{new SQLiteManager, "data/system.db"};
     QTreeView view;
+    view.resize(QSize{400, 600});
     view.setHeaderHidden(true);
     view.setModel(&model);
+    view.setItemDelegate(new QStyledOperatorDelegate);
     view.setWindowTitle("Mobile Operators");
     view.show();
 

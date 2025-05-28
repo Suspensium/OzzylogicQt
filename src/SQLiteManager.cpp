@@ -3,6 +3,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include "DataStructures.h"
+
 SQLiteManager::SQLiteManager() {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
 }

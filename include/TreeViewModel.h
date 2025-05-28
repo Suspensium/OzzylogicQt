@@ -12,8 +12,6 @@ class TreeViewModel : public QAbstractItemModel {
 public:
     TreeViewModel(IDatabaseManager *database, const QString &connectionString, QObject *parent = nullptr);
 
-    virtual ~TreeViewModel() override { delete m_rootItem; }
-
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
     virtual QModelIndex parent(const QModelIndex &index) const override;
@@ -27,6 +25,6 @@ public:
     void setupModelData();
 
 private:
-    TreeViewItem *m_rootItem{new TreeViewItem{"Root"}};
+    std::unique_ptr<TreeViewItem> m_rootItem{std::make_unique<TreeViewItem>("Root")};
     IDatabaseManager *m_dbManager;
 };
