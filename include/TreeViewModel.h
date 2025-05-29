@@ -10,7 +10,7 @@ class TreeViewModel : public QAbstractItemModel {
     Q_OBJECT
 
 public:
-    TreeViewModel(IDatabaseManager *database, const QString &connectionString, QObject *parent = nullptr);
+    TreeViewModel(IDatabaseManager *database, QObject *parent = nullptr);
 
     virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 

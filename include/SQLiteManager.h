@@ -6,7 +6,7 @@
 
 class SQLiteManager final : public IDatabaseManager {
 public:
-    SQLiteManager();
+    explicit SQLiteManager(const QString &connectionString);
 
     ~SQLiteManager() override {
         disconnect();

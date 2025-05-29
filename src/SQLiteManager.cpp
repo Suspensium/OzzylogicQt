@@ -5,8 +5,9 @@
 
 #include "DataStructures.h"
 
-SQLiteManager::SQLiteManager() {
+SQLiteManager::SQLiteManager(const QString &connectionString) {
     m_db = QSqlDatabase::addDatabase("QSQLITE");
+    connect(connectionString);
 }
 
 bool SQLiteManager::connect(const QString &connectionString) {

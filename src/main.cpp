@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     treeView.setStyle(new QProxyStyle);
     treeView.resize(QSize{400, 600});
     treeView.setHeaderHidden(true);
-    treeView.setModel(new TreeViewModel(new SQLiteManager, "data/system.db"));
+    treeView.setModel(new TreeViewModel(new SQLiteManager("data/system.db")));
     treeView.setItemDelegate(new QStyledOperatorDelegate);
     treeView.setWindowTitle("Mobile Operators");
     treeView.setSortingEnabled(true);

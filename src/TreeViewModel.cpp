@@ -1,15 +1,13 @@
 #include "TreeViewModel.h"
 
 #include <QSqlQuery>
-#include <QFile>
-#include <QIcon>
 
 #include "DataStructures.h"
 
-TreeViewModel::TreeViewModel(IDatabaseManager *database, const QString &connectionString, QObject *parent)
+TreeViewModel::TreeViewModel(IDatabaseManager *database, QObject *parent)
     : QAbstractItemModel{parent} {
     m_dbManager = database;
-    if (m_dbManager->connect(connectionString)) {
+    if (m_dbManager->isConnected()) {
         setupModelData();
     }
 }
