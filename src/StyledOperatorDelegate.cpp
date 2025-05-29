@@ -39,16 +39,19 @@ void QStyledOperatorDelegate::paintDisplayRole(QPainter *painter, const QStyleOp
 
 void QStyledOperatorDelegate::paintDecorationRole(QPainter *painter, const QStyleOptionViewItem &option,
                                                   const QModelIndex &index) {
-    const QVariant iconVar{index.data(Qt::DecorationRole)}; // QPair<QString, QIcon>
-    assert((iconVar.canConvert<QPair<QString, QIcon>>()));
+    const QVariant iconVar{index.data(Qt::DecorationRole)}; // QString – icon path
+    assert(iconVar.canConvert<QString>());
 
-    const auto [key, icon]{qvariant_cast<QPair<QString, QIcon> >(iconVar)};
+    const QString iconPath{qvariant_cast<QString>(iconVar)};
 
     // Find pixmap in cache
     QPixmap iconPixmap;
-    if (!QPixmapCache::find(key, &iconPixmap)) {
+    if (!QPixmapCache::find(iconPath, &iconPixmap)) {
+        if (!QFile::exists(iconPath)) return;
+
+        const QIcon icon{iconPath};
         iconPixmap = icon.pixmap(iconSize);
-        QPixmapCache::insert(key, iconPixmap);
+        QPixmapCache::insert(iconPath, iconPixmap);
     }
 
     const QRect iconRect{option.rect.topLeft(), iconSize};
