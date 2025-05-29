@@ -12,6 +12,8 @@ class TreeViewModel : public QAbstractItemModel {
 public:
     TreeViewModel(IDatabaseManager *database, const QString &connectionString, QObject *parent = nullptr);
 
+    virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+
     virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
     virtual QModelIndex parent(const QModelIndex &index) const override;

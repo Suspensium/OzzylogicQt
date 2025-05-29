@@ -1,6 +1,5 @@
-#include <QPixmapCache>
 #include <QTreeView>
-#include <QPixmapCache>
+#include <QProxyStyle>
 
 #include "DataStructures.h"
 #include "SQLiteManager.h"
@@ -17,14 +16,21 @@ int main(int argc, char *argv[]) {
     qRegisterMetaType<CountryInfo>("CountryInfo");
     QMetaType::registerConverter<CountryInfo, QString>(&CountryInfo::toString);
 
-    TreeViewModel model{new SQLiteManager, "data/system.db"};
-    QTreeView view;
-    view.resize(QSize{400, 600});
-    view.setHeaderHidden(true);
-    view.setModel(new TreeViewModel(new SQLiteManager, "data/system.db"));
-    view.setItemDelegate(new QStyledOperatorDelegate);
-    view.setWindowTitle("Mobile Operators");
-    view.show();
+    QTreeView treeView;
+    treeView.setRootIsDecorated(true);
+    treeView.setItemsExpandable(true);
+    treeView.setAllColumnsShowFocus(true);
+    treeView.setUniformRowHeights(true);
+    treeView.setAlternatingRowColors(false);
+    treeView.setStyle(new QProxyStyle);
+    treeView.resize(QSize{400, 600});
+    treeView.setHeaderHidden(true);
+    treeView.setModel(new TreeViewModel(new SQLiteManager, "data/system.db"));
+    treeView.setItemDelegate(new QStyledOperatorDelegate);
+    treeView.setWindowTitle("Mobile Operators");
+    treeView.setSortingEnabled(true);
+    treeView.sortByColumn(0, Qt::AscendingOrder);
+    treeView.show();
 
     return app.exec();
 }

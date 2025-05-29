@@ -14,6 +14,4 @@ private:
     static void paintDisplayRole(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
 
     static void paintDecorationRole(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
-
-    static void paintTreeLines(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
 };

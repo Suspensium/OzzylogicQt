@@ -14,6 +14,21 @@ TreeViewModel::TreeViewModel(IDatabaseManager *database, const QString &connecti
     }
 }
 
+void TreeViewModel::sort(int column, Qt::SortOrder order) {
+    emit layoutAboutToBeChanged();
+
+    QVector<TreeViewItem *> &children{m_rootItem->children()};
+
+    std::ranges::sort(children, [order](const TreeViewItem *a, const TreeViewItem *b) {
+        const QString sa{a->data().toString()};
+        const QString sb{b->data().toString()};
+
+        return order == Qt::AscendingOrder ? sa < sb : sa > sb;
+    });
+
+    emit layoutChanged();
+}
+
 QModelIndex TreeViewModel::index(int row, int column, const QModelIndex &parent) const {
     if (!hasIndex(row, column, parent)) return {};
 

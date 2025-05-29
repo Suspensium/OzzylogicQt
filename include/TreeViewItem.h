@@ -16,6 +16,14 @@ public:
         m_childItems.append(child);
     }
 
+    const QVector<TreeViewItem *> &children() const {
+        return m_childItems;
+    }
+
+    QVector<TreeViewItem *> &children() {
+        return m_childItems;
+    }
+
     TreeViewItem *child(int row) const {
         return m_childItems.value(row);
     }
