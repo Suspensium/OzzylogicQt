@@ -25,7 +25,13 @@ void QStyledOperatorDelegate::paintDisplayRole(QPainter *painter, const QStyleOp
                                                const QModelIndex &index) {
     const QVariant data{index.data(Qt::DisplayRole)}; // CountryInfo or OperatorInfo
 
-    // Draw text
+    // Draw countries in bold
+    if (!index.parent().isValid()) {
+        QFont boldFont{option.font};
+        boldFont.setBold(true);
+        painter->setFont(boldFont);
+    }
+
     const QString text{data.toString()};
     const QRect textRect{option.rect.adjusted(iconSize.width() + 10, 0, 0, 0)};
     painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, text);
@@ -38,6 +44,7 @@ void QStyledOperatorDelegate::paintDecorationRole(QPainter *painter, const QStyl
 
     const auto [key, icon]{qvariant_cast<QPair<QString, QIcon> >(iconVar)};
 
+    // Find pixmap in cache
     QPixmap iconPixmap;
     if (!QPixmapCache::find(key, &iconPixmap)) {
         iconPixmap = icon.pixmap(iconSize);
