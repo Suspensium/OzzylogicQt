@@ -49,7 +49,7 @@ QList<CountryInfo> SQLiteManager::getCountryOperatorData() {
             operatorsList.emplaceBack(mcc, opMnc, opName);
         }
         const CountryInfo &country{countries.emplaceBack(mcc, code, name, mncLength, operatorsList)};
-        country.addToCache();
+        country.addIconToCache(); // Cache country icons by default
     }
 
     return countries;

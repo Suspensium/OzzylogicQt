@@ -15,5 +15,6 @@ public:
 
     virtual QSqlQuery executeQuery(const QString &query) = 0;
 
+    // Returns a list of CountryInfos to fill a TreeView
     virtual QList<struct CountryInfo> getCountryOperatorData() = 0;
 };

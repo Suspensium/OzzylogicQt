@@ -21,7 +21,7 @@ struct OperatorInfo {
         return QString("%1 (%2-%3)").arg(name, mcc, mnc);
     }
 
-    bool addToCache() const {
+    bool addIconToCache() const {
         if (QFile::exists(iconPath)) {
             QPixmapCache::insert(iconPath, QIcon{iconPath}.pixmap(iconSize));
             return true;
@@ -48,7 +48,7 @@ struct CountryInfo {
         return QString("%1 (%2)").arg(name, code);
     }
 
-    [[maybe_unused]] bool addToCache() const {
+    bool addIconToCache() const {
         if (QFile::exists(iconPath)) {
             QPixmapCache::insert(iconPath, QIcon{iconPath}.pixmap(iconSize));
             return true;
