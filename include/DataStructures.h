@@ -40,7 +40,8 @@ struct CountryInfo {
 
     CountryInfo(const QString &mcc_, const QString &code_, const QString &name_,
                 int mncLength_, QList<OperatorInfo> operators_)
-        : mcc{mcc_}, code{code_}, name{name_}, mncLength{mncLength_}, operators{std::move(operators_)} {
+        : code{code_}, name{name_}, mncLength{mncLength_}, operators{std::move(operators_)} {
+        mcc.append(mcc_);
         iconPath = QString("icons/countries/%1.png").arg(code);
     }
 
@@ -56,7 +57,7 @@ struct CountryInfo {
         return false;
     }
 
-    QString mcc{};
+    QList<QString> mcc{};
     QString code{};
     QString name{};
     QString iconPath{};

@@ -29,7 +29,7 @@ QSqlQuery SQLiteManager::executeQuery(const QString &query) {
 }
 
 QList<CountryInfo> SQLiteManager::getCountryOperatorData() {
-    QList<CountryInfo> countries;
+    QHash<QString, CountryInfo> countries;
 
     QSqlQuery countryQuery{executeQuery("SELECT mcc, code, name, mnc_length FROM countries")};
     while (countryQuery.next()) {
@@ -48,9 +48,19 @@ QList<CountryInfo> SQLiteManager::getCountryOperatorData() {
             QString opName{operatorQuery.value(1).toString()};
             operatorsList.emplaceBack(mcc, opMnc, opName);
         }
-        const CountryInfo &country{countries.emplaceBack(mcc, code, name, mncLength, operatorsList)};
-        country.addIconToCache(); // Cache country icons by default
+
+        // If country already exists, we should append new MCC and corresponding operators to it
+        if (countries.contains(code)) {
+            CountryInfo &ci = countries[code];
+            ci.mcc.append(mcc);
+            ci.operators.append(operatorsList);
+        } else {
+            const auto it{
+                countries.emplace(code, mcc, code, name, mncLength, operatorsList)
+            };
+            it->addIconToCache(); // Cache country icons by default
+        }
     }
 
-    return countries;
+    return countries.values();
 }
