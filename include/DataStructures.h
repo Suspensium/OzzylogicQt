@@ -1,8 +1,13 @@
 #pragma once
 
+#include <QFile>
+#include <QIcon>
 #include <QString>
 #include <QList>
 #include <QMetaType>
+#include <QPixmapCache>
+
+constexpr QSize iconSize{16, 16};
 
 struct OperatorInfo {
     OperatorInfo() = default;
@@ -14,6 +19,14 @@ struct OperatorInfo {
 
     QString toString() const {
         return QString("%1 (%2-%3)").arg(name, mcc, mnc);
+    }
+
+    bool addToCache() const {
+        if (QFile::exists(iconPath)) {
+            QPixmapCache::insert(iconPath, QIcon{iconPath}.pixmap(iconSize));
+            return true;
+        }
+        return false;
     }
 
     QString mcc{};
@@ -33,6 +46,14 @@ struct CountryInfo {
 
     QString toString() const {
         return QString("%1 (%2)").arg(name, code);
+    }
+
+    [[maybe_unused]] bool addToCache() const {
+        if (QFile::exists(iconPath)) {
+            QPixmapCache::insert(iconPath, QIcon{iconPath}.pixmap(iconSize));
+            return true;
+        }
+        return false;
     }
 
     QString mcc{};

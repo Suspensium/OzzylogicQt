@@ -10,7 +10,10 @@ class QStyledOperatorDelegate : public QStyledItemDelegate {
 public:
     virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    // virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
-    //     return QSize{50, 50};
-    // }
+private:
+    static void paintDisplayRole(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+
+    static void paintDecorationRole(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
+
+    static void paintTreeLines(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index);
 };

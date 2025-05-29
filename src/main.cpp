@@ -1,4 +1,6 @@
+#include <QPixmapCache>
 #include <QTreeView>
+#include <QPixmapCache>
 
 #include "DataStructures.h"
 #include "SQLiteManager.h"
@@ -7,6 +9,8 @@
 
 int main(int argc, char *argv[]) {
     QApplication app{argc, argv};
+
+    QPixmapCache::setCacheLimit(1024); // 1 Mb for icons cache
 
     qRegisterMetaType<OperatorInfo>("OperatorInfo");
     QMetaType::registerConverter<OperatorInfo, QString>(&OperatorInfo::toString);
@@ -17,7 +21,7 @@ int main(int argc, char *argv[]) {
     QTreeView view;
     view.resize(QSize{400, 600});
     view.setHeaderHidden(true);
-    view.setModel(&model);
+    view.setModel(new TreeViewModel(new SQLiteManager, "data/system.db"));
     view.setItemDelegate(new QStyledOperatorDelegate);
     view.setWindowTitle("Mobile Operators");
     view.show();

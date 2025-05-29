@@ -48,7 +48,8 @@ QList<CountryInfo> SQLiteManager::getCountryOperatorData() {
             QString opName{operatorQuery.value(1).toString()};
             operatorsList.emplaceBack(mcc, opMnc, opName);
         }
-        countries.emplaceBack(mcc, code, name, mncLength, operatorsList);
+        const CountryInfo &country{countries.emplaceBack(mcc, code, name, mncLength, operatorsList)};
+        country.addToCache();
     }
 
     return countries;

@@ -55,9 +55,7 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
             return QVariant::fromValue(country);
         }
         if (role == Qt::DecorationRole) {
-            if (QFile::exists(country.iconPath)) {
-                return QIcon{country.iconPath};
-            }
+            return QVariant::fromValue(QPair<QString, QIcon>{country.iconPath, QIcon{country.iconPath}});
         }
     } else if (itemData.canConvert<OperatorInfo>()) {
         const OperatorInfo op{itemData.value<OperatorInfo>()};
@@ -66,9 +64,7 @@ QVariant TreeViewModel::data(const QModelIndex &index, int role) const {
             return QVariant::fromValue(op);
         }
         if (role == Qt::DecorationRole) {
-            if (QFile::exists(op.iconPath)) {
-                return QIcon{op.iconPath};
-            }
+            return QVariant::fromValue(QPair<QString, QIcon>{op.iconPath, QIcon{op.iconPath}});
         }
     }
     return {};
