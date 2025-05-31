@@ -4,8 +4,6 @@
 
 #include "DataStructures.h"
 
-extern const QSize iconSize;
-
 void QStyledOperatorDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                     const QModelIndex &index) const {
     painter->save();
