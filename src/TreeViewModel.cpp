@@ -1,7 +1,5 @@
 #include "TreeViewModel.h"
 
-#include <QSqlQuery>
-
 #include "DataStructures.h"
 
 TreeViewModel::TreeViewModel(IDatabaseManager *database, QObject *parent)

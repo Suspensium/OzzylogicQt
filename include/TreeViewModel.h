@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QAbstractItemModel>
-#include <QSqlDatabase>
 
 #include "TreeViewItem.h"
 #include "DatabaseManager.h"
